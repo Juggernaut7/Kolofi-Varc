@@ -1,0 +1,102 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Light Mode - Kolofi Branding */
+  --background: #F8FAFC;
+  --foreground: #0F172A;
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+  --primary: #22C55E; /* Vibrant Green */
+  --primary-foreground: #FFFFFF;
+  --secondary: #16A34A;
+  --secondary-foreground: #FFFFFF;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  --accent: #22C55E;
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #E2E8F0;
+  --input: #F1F5F9;
+  --ring: #22C55E;
+  --radius: 0.75rem;
+}
+
+.dark {
+  /* Dark Mode - Kolofi Branding */
+  --background: #020617; /* Deeper midnight blue/black */
+  --foreground: #F8FAFC;
+  --card: #0F172A;
+  --card-foreground: #F8FAFC;
+  --popover: #0F172A;
+  --popover-foreground: #F8FAFC;
+  --primary: #22C55E;
+  --primary-foreground: #020617;
+  --secondary: #16A34A;
+  --secondary-foreground: #FFFFFF;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+  --accent: #22C55E;
+  --accent-foreground: #020617;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #1E293B;
+  --input: #0F172A;
+  --ring: #22C55E;
+}
+
+@theme inline {
+  --font-sans: 'Inter', 'Inter Fallback', system-ui, sans-serif;
+  --font-mono: 'Menlo', 'Courier New', monospace;
+  
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

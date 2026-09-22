@@ -1,0 +1,19 @@
+{
+  "name": "kolofi-contracts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:arc": "hardhat run scripts/deploy.ts --network arc",
+    "deploy:arcTestnet": "hardhat run scripts/deploy.ts --network arcTestnet"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/node": "^22.10.0",
+    "dotenv": "^16.4.7",
+    "hardhat": "^2.22.17",
+    "typescript": "^5.7.3",
+    "ts-node": "^10.9.2"
+  }
+}

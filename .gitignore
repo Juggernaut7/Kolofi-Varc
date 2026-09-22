@@ -1,0 +1,43 @@
+# General ignores
+node_modules/
+.next/
+dist/
+build/
+.DS_Store
+*.local
+
+# Kolofi Client
+/Kolofi-client/node_modules/
+/Kolofi-client/.next/
+/Kolofi-client/.env*.local
+
+# Contracts
+/contracts/node_modules/
+/contracts/cache/
+/contracts/artifacts/
+/contracts/typechain-types/
+/contracts/.env
+
+# Kolofi Server
+/Kolofi-server/node_modules/
+/Kolofi-server/.env*.local
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Other tools
+.vercel/
+.npmrc
+.snowflake/
+.v0-trash/
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+next.user-config.*
