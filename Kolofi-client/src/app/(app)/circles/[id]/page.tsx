@@ -6,6 +6,7 @@ import {
   useReadContract,
   useWriteContract,
   useWaitForTransactionReceipt,
+  useSwitchChain,
 } from 'wagmi'
 import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
@@ -33,7 +34,8 @@ export default function CircleDetailPage({
 }) {
   const { id } = use(params)
   const circleId = BigInt(id)
-  const { address, isConnected } = useAccount()
+  const { address, isConnected, chain } = useAccount()
+  const { switchChainAsync } = useSwitchChain()
   const [copied, setCopied] = useState(false)
 
   const { data: circle, refetch: refetchCircle } = useReadContract({
@@ -95,62 +97,46 @@ export default function CircleDetailPage({
     refetchMembers()
   }
 
-  if (!circle || circle.creator === '0x0000000000000000000000000000000000000000') {
-    return (
-      <div className="px-4 py-8 max-w-lg mx-auto text-muted-foreground">
-        Circle not found on Arc.
-      </div>
-    )
+  const ensureArcChain = async () => {
+    if (chain?.id !== arc.id && switchChainAsync) {
+      toast.info('Switching wallet to Arc Mainnet...')
+      await switchChainAsync({ chainId: arc.id })
+    }
   }
 
-  const memberList = members ?? []
-  const contribProgress =
-    circle.memberCount > 0n && roundCount !== undefined
-      ? Number((roundCount * 100n) / circle.memberCount)
-      : 0
-  const isRecipient =
-    address && recipient && address.toLowerCase() === recipient.toLowerCase()
-  const canContribute =
-    isMember &&
-    circle.active &&
-    circle.memberCount >= circle.maxMembers &&
-    !myContributed
-  const canClaim =
-    isRecipient &&
-    circle.active &&
-    roundCount !== undefined &&
-    roundCount >= circle.memberCount
-  const canJoin =
-    isConnected &&
-    !isMember &&
-    circle.active &&
-    !circle.started &&
-    circle.memberCount < circle.maxMembers
-
-  const inviteLink =
-    typeof window !== 'undefined'
-      ? `${window.location.origin}/circles/${id}`
-      : `/circles/${id}`
-
-  const run = (fn: 'joinCircle' | 'contribute' | 'claimPayout') => {
-    if (fn === 'contribute') {
+  const run = async (fn: 'joinCircle' | 'contribute' | 'claimPayout') => {
+    try {
+      await ensureArcChain()
+      if (fn === 'contribute') {
+        writeContract({
+          address: ARC_CIRCLE_ADDRESS,
+          abi: arcCircleAbi,
+          functionName: 'contribute',
+          args: [circleId],
+          value: circle?.contributionAmount,
+          chainId: arc.id,
+        })
+        return
+      }
       writeContract({
         address: ARC_CIRCLE_ADDRESS,
         abi: arcCircleAbi,
-        functionName: 'contribute',
+        functionName: fn,
         args: [circleId],
-        value: circle.contributionAmount,
         chainId: arc.id,
       })
-      return
+    } catch (err: any) {
+      toast.error(err?.message || 'Transaction failed')
     }
-    writeContract({
-      address: ARC_CIRCLE_ADDRESS,
-      abi: arcCircleAbi,
-      functionName: fn,
-      args: [circleId],
-      chainId: arc.id,
-    })
+  }
+
+  if (!circle || circle.creator === '0x0000000000000000000000000000000000000000') {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-4">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <p className="text-muted-foreground text-sm">Loading circle on Arc Mainnet...</p>
+      </div>
+    )
   }
 
   return (

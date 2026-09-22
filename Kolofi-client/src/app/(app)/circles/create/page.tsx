@@ -2,12 +2,12 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from 'wagmi'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Loader2, ArrowLeft } from 'lucide-react'
+import { Loader2, ArrowLeft, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 import { ARC_CIRCLE_ADDRESS, arc, circleConfigured } from '@/lib/web3/config'
 import { arcCircleAbi } from '@/lib/web3/abis'
@@ -17,7 +17,9 @@ import { toast } from 'sonner'
 
 export default function CreateCirclePage() {
   const router = useRouter()
-  const { isConnected } = useAccount()
+  const { isConnected, chain } = useAccount()
+  const { switchChainAsync, isPending: switchingChain } = useSwitchChain()
+
   const [name, setName] = useState('')
   const [contribution, setContribution] = useState('5')
   const [maxMembers, setMaxMembers] = useState('5')
@@ -27,22 +29,40 @@ export default function CreateCirclePage() {
     hash,
   })
 
+  const isWrongChain = isConnected && chain?.id !== arc.id
+
   if (isSuccess) {
     router.push('/circles')
   }
 
-  const onSubmit = (e: React.FormEvent) => {
+  const handleSwitch = async () => {
+    try {
+      await switchChainAsync({ chainId: arc.id })
+      toast.success('Switched to Arc Mainnet')
+    } catch (err: any) {
+      toast.error(err?.message || 'Failed to switch network')
+    }
+  }
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!circleConfigured()) {
       toast.error('Circle contract address not configured')
       return
     }
-    const members = Number(maxMembers)
-    if (!name.trim() || members < 2 || members > 50) {
-      toast.error('Name required; members must be 2–50')
-      return
-    }
+
     try {
+      if (isWrongChain) {
+        toast.info('Switching wallet to Arc Mainnet...')
+        await switchChainAsync({ chainId: arc.id })
+      }
+
+      const members = Number(maxMembers)
+      if (!name.trim() || members < 2 || members > 50) {
+        toast.error('Name required; members must be 2–50')
+        return
+      }
+
       writeContract({
         address: ARC_CIRCLE_ADDRESS,
         abi: arcCircleAbi,
@@ -51,7 +71,7 @@ export default function CreateCirclePage() {
         chainId: arc.id,
       })
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Invalid input')
+      toast.error(err instanceof Error ? err.message : 'Action failed')
     }
   }
 
@@ -75,6 +95,18 @@ export default function CreateCirclePage() {
           Esusu / Ajo style rotating pool on Arc. You join as member #1 (first payout).
         </p>
       </div>
+
+      {isWrongChain && (
+        <Card className="p-4 bg-amber-500/10 border-amber-500/30 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 text-xs text-amber-700 dark:text-amber-400 font-medium">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>Connected to Network #{chain?.id}. Switch to Arc Mainnet to deploy.</span>
+          </div>
+          <Button size="sm" onClick={handleSwitch} disabled={switchingChain} className="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shrink-0">
+            {switchingChain ? 'Switching…' : 'Switch Network'}
+          </Button>
+        </Card>
+      )}
 
       <Card className="p-6">
         <form onSubmit={onSubmit} className="space-y-4">
@@ -115,10 +147,27 @@ export default function CreateCirclePage() {
           {error && (
             <p className="text-sm text-destructive">{error.message}</p>
           )}
-          <Button type="submit" className="w-full bg-primary" disabled={isPending || confirming}>
-            {(isPending || confirming) && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            {confirming ? 'Confirming…' : isPending ? 'Sign in wallet…' : 'Create on Arc'}
-          </Button>
+
+          {isWrongChain ? (
+            <Button
+              type="button"
+              onClick={handleSwitch}
+              className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold"
+              disabled={switchingChain}
+            >
+              {switchingChain ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+              Switch to Arc Mainnet (5042)
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="w-full bg-primary font-bold"
+              disabled={isPending || confirming || switchingChain}
+            >
+              {(isPending || confirming) && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              {confirming ? 'Confirming on Arc…' : isPending ? 'Sign in wallet…' : 'Create on Arc'}
+            </Button>
+          )}
         </form>
       </Card>
     </div>

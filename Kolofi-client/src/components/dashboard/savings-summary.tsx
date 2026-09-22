@@ -7,6 +7,7 @@ import { arc, ARC_VAULT_ADDRESS, ARC_CIRCLE_ADDRESS, vaultConfigured, circleConf
 import { arcVaultAbi, arcCircleAbi } from '@/lib/web3/abis';
 import { formatUsdcLabel, formatUsdc } from '@/lib/web3/format';
 import { useMemo } from 'react';
+import { formatUnits } from 'viem';
 
 const MAX_SCAN = 30n;
 
@@ -19,6 +20,18 @@ export default function SavingsSummary() {
     chainId: arc.id,
     query: { enabled: Boolean(address) },
   });
+
+  const formattedWalletBalance = useMemo(() => {
+    if (!balanceData || balanceData.value === undefined) return '0.00';
+    try {
+      const raw = formatUnits(balanceData.value, balanceData.decimals ?? 18);
+      const num = parseFloat(raw);
+      if (isNaN(num)) return '0.00';
+      return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+    } catch {
+      return '0.00';
+    }
+  }, [balanceData]);
 
   // 2. User vault IDs
   const readyVault = vaultConfigured();
@@ -133,7 +146,7 @@ export default function SavingsSummary() {
             </p>
             <div className="flex items-baseline justify-between">
               <p className="text-lg sm:text-xl font-black">
-                {balanceData ? `${Number(balanceData.formatted).toFixed(2)} USDC` : '0.00 USDC'}
+                {formattedWalletBalance} USDC
               </p>
             </div>
           </div>

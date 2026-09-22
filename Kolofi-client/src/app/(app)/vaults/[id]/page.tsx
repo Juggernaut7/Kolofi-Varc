@@ -6,6 +6,7 @@ import {
   useReadContract,
   useWriteContract,
   useWaitForTransactionReceipt,
+  useSwitchChain,
 } from 'wagmi'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -24,7 +25,8 @@ export default function VaultDetailPage({
 }) {
   const { id } = use(params)
   const vaultId = BigInt(id)
-  const { address, isConnected } = useAccount()
+  const { address, isConnected, chain } = useAccount()
+  const { switchChainAsync } = useSwitchChain()
   const [amount, setAmount] = useState('1')
 
   const { data: vault, refetch } = useReadContract({
@@ -50,22 +52,16 @@ export default function VaultDetailPage({
     refetch()
   }
 
-  if (!vault || vault.owner === '0x0000000000000000000000000000000000000000') {
-    return (
-      <div className="px-4 py-6 max-w-lg mx-auto">
-        <p className="text-muted-foreground">Vault not found on Arc.</p>
-      </div>
-    )
+  const ensureArcChain = async () => {
+    if (chain?.id !== arc.id && switchChainAsync) {
+      toast.info('Switching wallet to Arc Mainnet...')
+      await switchChainAsync({ chainId: arc.id })
+    }
   }
 
-  const progress =
-    vault.goalAmount > 0n
-      ? Number((vault.balance * 10000n) / vault.goalAmount) / 100
-      : 0
-  const isOwner = address?.toLowerCase() === vault.owner.toLowerCase()
-
-  const deposit = () => {
+  const deposit = async () => {
     try {
+      await ensureArcChain()
       writeContract({
         address: ARC_VAULT_ADDRESS,
         abi: arcVaultAbi,
@@ -74,20 +70,39 @@ export default function VaultDetailPage({
         value: parseUsdc(amount),
         chainId: arc.id,
       })
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Invalid amount')
+    } catch (err: any) {
+      toast.error(err?.message || 'Invalid amount')
     }
   }
 
-  const withdraw = () => {
-    writeContract({
-      address: ARC_VAULT_ADDRESS,
-      abi: arcVaultAbi,
-      functionName: 'withdraw',
-      args: [vaultId],
-      chainId: arc.id,
-    })
+  const withdraw = async () => {
+    try {
+      await ensureArcChain()
+      writeContract({
+        address: ARC_VAULT_ADDRESS,
+        abi: arcVaultAbi,
+        functionName: 'withdraw',
+        args: [vaultId],
+        chainId: arc.id,
+      })
+    } catch (err: any) {
+      toast.error(err?.message || 'Withdraw failed')
+    }
   }
+
+  if (!vault || vault.owner === '0x0000000000000000000000000000000000000000') {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-4">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <p className="text-muted-foreground text-sm">Loading vault on Arc Mainnet...</p>
+      </div>
+    )
+  }
+
+  const progress =
+    vault.goalAmount > 0n
+      ? Number((vault.balance * 10000n) / vault.goalAmount) / 100
+      : 0
 
   return (
     <div className="space-y-6 px-4 py-6 max-w-lg mx-auto">

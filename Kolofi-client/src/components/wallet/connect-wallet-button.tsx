@@ -29,10 +29,10 @@ export default function ConnectWalletButton({
   className?: string
   size?: 'sm' | 'default' | 'lg'
 }) {
-  const { address, isConnected, isConnecting } = useAccount()
+  const { address, isConnected, isConnecting, chain } = useAccount()
   const { connectAsync, connectors, isPending: isConnectingWagmi } = useConnect()
   const { disconnect } = useDisconnect()
-  const chainId = useChainId()
+  const fallbackChainId = useChainId()
   const { switchChainAsync, isPending: isSwitching } = useSwitchChain()
 
   const [mounted, setMounted] = useState(false)
@@ -43,7 +43,9 @@ export default function ConnectWalletButton({
     setMounted(true)
   }, [])
 
-  const onArc = chainId === arc.id || chainId === arcTestnet.id
+  // Check the wallet's actual active chain
+  const activeChainId = chain?.id ?? fallbackChainId
+  const onArc = activeChainId === arc.id || activeChainId === arcTestnet.id
   const busy = isConnecting || isConnectingWagmi || isSwitching || Boolean(loadingConnectorId)
 
   // Switch or Add Arc Chain
