@@ -176,61 +176,70 @@ export default function ConnectWalletButton({
         size={size}
         className={cn('gap-2 bg-primary hover:bg-primary/90 font-bold shadow-lg shadow-primary/20 cursor-pointer', className)}
         disabled={busy}
-        onClick={() => {
-          // If only 1 connector or window.ethereum is directly ready, try direct connect or open dialog
-          if (connectors.length > 1) {
-            setModalOpen(true)
-          } else if (connectors.length === 1) {
-            handleConnect(connectors[0])
-          } else {
-            setModalOpen(true)
-          }
-        }}
+        onClick={() => setModalOpen(true)}
       >
         {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wallet className="w-4 h-4" />}
         Connect Wallet
       </Button>
 
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="sm:max-w-md rounded-[2rem] p-6">
-          <DialogHeader className="space-y-2">
-            <DialogTitle className="text-2xl font-black text-center">Connect Your Wallet</DialogTitle>
+        <DialogContent className="sm:max-w-md w-[94vw] max-h-[85vh] flex flex-col overflow-hidden rounded-[2rem] p-6 shadow-2xl bg-card border-border/80">
+          <DialogHeader className="space-y-1.5 shrink-0 text-center pb-1">
+            <DialogTitle className="text-2xl font-black text-center text-foreground">
+              Connect Your Wallet
+            </DialogTitle>
             <DialogDescription className="text-center text-xs text-muted-foreground">
-              Select a wallet to interact with Kolofi on Arc Mainnet.
+              Select your wallet to interact with Kolofi on Arc Mainnet.
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-3 pt-4">
+          {/* Scrollable list container */}
+          <div className="space-y-2.5 overflow-y-auto flex-1 min-h-0 pr-1.5 py-2 my-1 focus:outline-none scrollbar-thin">
             {connectors.map((c) => {
               const isLoading = loadingConnectorId === c.id
 
               let name = c.name
-              if (c.id === 'injected') name = 'Browser Wallet (MetaMask / Rabby / Brave)'
-              if (c.id === 'walletConnect') name = 'WalletConnect (Mobile / QR Code)'
+              if (c.id === 'injected' && name.toLowerCase() === 'injected') {
+                name = 'Browser Wallet (MetaMask / Rabby / Brave)'
+              }
+              if (c.id === 'walletConnect') {
+                name = 'WalletConnect (Mobile / QR Code)'
+              }
+
+              const isWalletConnect = c.id === 'walletConnect'
+              const subtext = isWalletConnect
+                ? 'Scan QR with your mobile wallet app'
+                : 'Browser extension or installed desktop wallet'
 
               return (
                 <button
                   key={c.uid || c.id}
                   disabled={busy}
                   onClick={() => handleConnect(c)}
-                  className="w-full flex items-center justify-between p-4 rounded-2xl bg-muted/40 hover:bg-primary/10 border border-border/60 hover:border-primary/40 transition-all font-bold text-sm text-left group"
+                  className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-muted/40 hover:bg-primary/10 border border-border/60 hover:border-primary/40 transition-all font-bold text-sm text-left group cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-background flex items-center justify-center border border-border/50 group-hover:scale-105 transition-transform text-primary">
-                      <Wallet className="w-5 h-5" />
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-xl bg-background flex items-center justify-center border border-border/50 group-hover:scale-105 transition-transform text-primary shrink-0 overflow-hidden p-1.5">
+                      {c.icon ? (
+                        <img src={c.icon} alt={c.name} className="w-full h-full object-contain rounded-lg" />
+                      ) : (
+                        <Wallet className="w-5 h-5" />
+                      )}
                     </div>
-                    <div>
-                      <p className="font-bold text-foreground group-hover:text-primary transition-colors">{name}</p>
-                      <p className="text-[11px] text-muted-foreground font-normal">
-                        {c.id === 'injected' ? 'Extension in your browser' : 'Scan with your mobile wallet app'}
+                    <div className="min-w-0">
+                      <p className="font-bold text-foreground group-hover:text-primary transition-colors truncate">
+                        {name}
+                      </p>
+                      <p className="text-[11px] text-muted-foreground font-normal truncate">
+                        {subtext}
                       </p>
                     </div>
                   </div>
 
                   {isLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                    <Loader2 className="w-5 h-5 animate-spin text-primary shrink-0 ml-2" />
                   ) : (
-                    <CheckCircle2 className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity text-primary" />
+                    <CheckCircle2 className="w-5 h-5 text-primary opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-2" />
                   )}
                 </button>
               )
@@ -256,9 +265,9 @@ export default function ConnectWalletButton({
             )}
           </div>
 
-          <div className="pt-4 border-t border-border/50 text-center">
-            <p className="text-[11px] text-muted-foreground">
-              By connecting, you agree to interact on Arc Mainnet (Chain ID 5042).
+          <div className="pt-3 border-t border-border/50 text-center shrink-0">
+            <p className="text-[11px] text-muted-foreground font-medium">
+              Arc Mainnet (Chain ID 5042) · Gas paid in native USDC
             </p>
           </div>
         </DialogContent>
