@@ -16,10 +16,13 @@ build/
 /contracts/cache/
 /contracts/artifacts/
 /contracts/typechain-types/
+# Environment & Secrets
+.env
+.env.*
+*.local
 /contracts/.env
-
-# Kolofi Server
-/Kolofi-server/node_modules/
+/Kolofi-client/.env
+/Kolofi-client/.env*.local
 /Kolofi-server/.env*.local
 
 # OS files
