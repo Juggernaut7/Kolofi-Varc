@@ -139,6 +139,36 @@ export default function CircleDetailPage({
     )
   }
 
+  const memberList = (members as string[] | undefined) ?? []
+  const isRecipient =
+    recipient && address ? recipient.toLowerCase() === address.toLowerCase() : false
+  const canContribute =
+    isConnected &&
+    Boolean(isMember) &&
+    circle.active &&
+    circle.memberCount >= circle.maxMembers &&
+    !myContributed
+  const canClaim =
+    isRecipient &&
+    circle.active &&
+    roundCount !== undefined &&
+    roundCount >= circle.memberCount
+  const canJoin =
+    isConnected &&
+    !isMember &&
+    circle.active &&
+    !circle.started &&
+    circle.memberCount < circle.maxMembers
+
+  const inviteLink =
+    typeof window !== 'undefined'
+      ? `${window.location.origin}/circles/${id}`
+      : `/circles/${id}`
+
+  const roundContributed = Number(roundCount ?? 0n)
+  const totalCircleMembers = Number(circle.memberCount || 1n)
+  const contribProgress = totalCircleMembers > 0 ? Math.min((roundContributed / totalCircleMembers) * 100, 100) : 0
+
   return (
     <div className="space-y-8 px-4 py-8 pb-24 max-w-lg mx-auto">
       <motion.div

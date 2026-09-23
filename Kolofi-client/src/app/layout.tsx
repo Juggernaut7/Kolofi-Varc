@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   title: 'Kolofi - Save together. Save smarter.',
   description: 'USDC group savings and vaults on Arc mainnet. Transparent circles (Esusu/Ajo) powered by Circle Arc.',
   manifest: '/manifest.json',
+  icons: {
+    icon: '/icon.svg',
+    apple: '/icon.svg',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',

@@ -6,17 +6,16 @@ import { cn } from '@/lib/utils'
 import { navItems } from './bottom-navigation'
 import ConnectWalletButton from '@/components/wallet/connect-wallet-button'
 
+import KolofiLogo from '@/components/brand/logo'
+
 export default function DesktopNavigation() {
   const pathname = usePathname()
 
   return (
     <aside className="hidden md:flex md:w-64 md:shrink-0 md:flex-col md:border-r md:border-border/60 md:bg-card/60">
       <div className="sticky top-0 flex h-screen flex-col px-5 py-6">
-        <Link href="/dashboard" className="mb-10 flex items-center gap-3 px-3" aria-label="Kolofi home">
-          <span className="flex size-10 items-center justify-center rounded-xl bg-primary text-lg font-black text-primary-foreground">
-            K
-          </span>
-          <span className="text-xl font-black tracking-tight text-foreground">Kolofi</span>
+        <Link href="/dashboard" className="mb-8 flex items-center px-1" aria-label="Kolofi home">
+          <KolofiLogo size="sm" />
         </Link>
 
         <nav aria-label="Primary navigation" className="space-y-2 flex-1">

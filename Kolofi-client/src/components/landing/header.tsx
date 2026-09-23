@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import ConnectWalletButton from '@/components/wallet/connect-wallet-button'
 import { useAccount } from 'wagmi'
+import KolofiLogo from '@/components/brand/logo'
 
 export function LandingHeader() {
   const [isOpen, setIsOpen] = useState(false)
@@ -32,17 +33,10 @@ export function LandingHeader() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <motion.div 
-              whileHover={{ rotate: 5, scale: 1.05 }}
-              className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-black text-xl shadow-lg shadow-primary/20"
-            >
-              K
+          <Link href="/" className="group shrink-0" aria-label="Kolofi home">
+            <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.2 }}>
+              <KolofiLogo size="sm" />
             </motion.div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-black tracking-tight group-hover:text-primary transition-colors leading-none">Kolofi</span>
-              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">on Arc</span>
-            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -65,7 +59,7 @@ export function LandingHeader() {
           </nav>
 
           {/* CTA & Theme Toggle */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 sm:gap-3">
             <Button
               variant="ghost"
               size="icon"

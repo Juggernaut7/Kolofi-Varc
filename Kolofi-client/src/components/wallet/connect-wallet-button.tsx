@@ -136,11 +136,11 @@ export default function ConnectWalletButton({
     return (
       <Button
         size={size}
-        className={cn('gap-2 bg-amber-600 hover:bg-amber-700 text-white font-bold', className)}
+        className={cn('gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-md shadow-primary/20', className)}
         onClick={handleSwitchToArc}
         disabled={busy}
       >
-        {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertCircle className="w-4 h-4" />}
+        {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Coins className="w-4 h-4" />}
         Switch to Arc
       </Button>
     )

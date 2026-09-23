@@ -104,6 +104,10 @@ export default function VaultDetailPage({
       ? Number((vault.balance * 10000n) / vault.goalAmount) / 100
       : 0
 
+  const isOwner = Boolean(
+    address && vault && address.toLowerCase() === vault.owner.toLowerCase()
+  )
+
   return (
     <div className="space-y-6 px-4 py-6 max-w-lg mx-auto">
       <div>

@@ -12,7 +12,7 @@ export function HeroSection() {
   const { isConnected } = useAccount()
 
   return (
-    <section className="relative overflow-hidden bg-background pt-16 pb-20 md:pt-24 md:pb-32">
+    <section className="relative overflow-hidden bg-background pt-10 pb-14 sm:pt-16 sm:pb-20 md:pt-24 md:pb-32">
       {/* Decorative Background Element */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full pointer-events-none">
         <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[60%] bg-primary/5 blur-[120px] rounded-full" />
@@ -20,15 +20,15 @@ export function HeroSection() {
       </div>
 
       <div className="container relative mx-auto px-4 md:px-6">
-        <div className="grid gap-12 lg:grid-cols-2 md:gap-8 items-center">
+        <div className="grid gap-8 sm:gap-12 lg:grid-cols-2 md:gap-8 items-center">
           {/* Text Content */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="flex flex-col gap-8"
+            className="flex flex-col gap-6 sm:gap-8"
           >
-            <div className="space-y-6">
+            <div className="space-y-5 sm:space-y-6">
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -39,12 +39,12 @@ export function HeroSection() {
                 <span>Live on Arc Mainnet · Native USDC Gas</span>
               </motion.div>
               
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-balance leading-[1.1]">
+              <h1 className="text-[2.65rem] sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-balance leading-[1.05] sm:leading-[1.1]">
                 Save together. <br />
                 <span className="text-primary italic">Save in USDC on Arc.</span>
               </h1>
               
-              <p className="text-lg md:text-xl text-muted-foreground text-balance max-w-lg leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl text-muted-foreground text-balance max-w-lg leading-relaxed">
                 Kolofi brings traditional rotating group savings (Esusu / Ajo) and personal goal vaults directly on-chain. Transparent, trustless, and zero token approval hassles.
               </p>
             </div>
@@ -91,7 +91,7 @@ export function HeroSection() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="relative flex items-center justify-center aspect-square md:aspect-auto h-[400px] lg:h-[600px]"
+            className="relative flex items-center justify-center aspect-square md:aspect-auto h-70 sm:h-100 lg:h-150"
           >
             {/* Soft Glow behind animation */}
             <div className="absolute inset-0 bg-primary/5 rounded-full blur-[100px] animate-pulse" />

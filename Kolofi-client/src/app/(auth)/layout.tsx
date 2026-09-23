@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import KolofiLogo from '@/components/brand/logo';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
@@ -13,14 +14,8 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         animate={{ opacity: 1, y: 0 }}
         className="mb-8 text-center"
       >
-        <Link href="/" className="flex items-center gap-2 group justify-center">
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-black text-xl shadow-lg shadow-primary/20">
-            K
-          </div>
-          <div className="text-left">
-            <span className="text-2xl font-black tracking-tight block leading-none">Kolofi</span>
-            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">on Arc Mainnet</span>
-          </div>
+        <Link href="/" className="flex justify-center" aria-label="Kolofi home">
+          <KolofiLogo size="lg" showBadge />
         </Link>
       </motion.div>
 

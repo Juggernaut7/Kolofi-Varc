@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { APP_NAME } from '@/lib/constants'
 import { motion } from 'framer-motion'
 import { Github, Twitter, Linkedin, Facebook } from 'lucide-react'
+import KolofiLogo from '@/components/brand/logo'
 
 export function LandingFooter() {
   const currentYear = new Date().getFullYear()
@@ -15,10 +16,7 @@ export function LandingFooter() {
           {/* Brand */}
           <div className="space-y-6">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-black text-xl">
-                K
-              </div>
-              <span className="text-2xl font-black tracking-tight">{APP_NAME}</span>
+              <KolofiLogo size="sm" />
             </Link>
             <p className="text-muted-foreground leading-relaxed max-w-xs">
               Empowering African communities with transparent, blockchain-powered savings circles.

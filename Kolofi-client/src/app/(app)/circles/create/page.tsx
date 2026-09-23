@@ -97,18 +97,18 @@ export default function CreateCirclePage() {
       </div>
 
       {isWrongChain && (
-        <Card className="p-4 bg-amber-500/10 border-amber-500/30 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5 text-xs text-amber-700 dark:text-amber-400 font-medium">
-            <AlertCircle className="w-4 h-4 shrink-0" />
+        <Card className="p-4 bg-primary/10 border-primary/25 rounded-2xl flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 text-xs text-foreground font-medium">
+            <AlertCircle className="w-4 h-4 text-primary shrink-0" />
             <span>Connected to Network #{chain?.id}. Switch to Arc Mainnet to deploy.</span>
           </div>
-          <Button size="sm" onClick={handleSwitch} disabled={switchingChain} className="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shrink-0">
+          <Button size="sm" onClick={handleSwitch} disabled={switchingChain} className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold shrink-0 rounded-xl shadow-md shadow-primary/20">
             {switchingChain ? 'Switching…' : 'Switch Network'}
           </Button>
         </Card>
       )}
 
-      <Card className="p-6">
+      <Card className="p-6 rounded-[2rem] border-border/60">
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">Circle name</Label>
@@ -152,7 +152,7 @@ export default function CreateCirclePage() {
             <Button
               type="button"
               onClick={handleSwitch}
-              className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-2xl h-12 shadow-lg shadow-primary/25"
               disabled={switchingChain}
             >
               {switchingChain ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
@@ -161,7 +161,7 @@ export default function CreateCirclePage() {
           ) : (
             <Button
               type="submit"
-              className="w-full bg-primary font-bold"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-2xl h-12 shadow-lg shadow-primary/25"
               disabled={isPending || confirming || switchingChain}
             >
               {(isPending || confirming) && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
