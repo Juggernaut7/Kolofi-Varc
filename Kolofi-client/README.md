@@ -23,53 +23,53 @@ Kolofi enables communities to save together with features for:
 
 ```
 /vercel/share/v0-project/
-├── app/
-│   ├── page.tsx                 # Landing page
-│   ├── layout.tsx               # Root layout with theme
-│   ├── globals.css              # Global styles and design tokens
-│   ├── signup/page.tsx          # Sign up page
-│   ├── login/page.tsx           # Login page
-│   ├── onboarding/page.tsx      # Onboarding flow
-│   ├── dashboard/
-│   │   ├── layout.tsx           # Dashboard layout with navigation
-│   │   ├── page.tsx             # Dashboard home
-│   │   ├── circles/page.tsx     # Savings circles
-│   │   ├── vaults/page.tsx      # Personal vaults
-│   │   ├── funds/page.tsx       # Group funds
-│   │   └── profile/page.tsx     # User profile & settings
-│   ├── api/auth/
-│   │   ├── signup/route.ts      # Sign up API
-│   │   └── login/route.ts       # Login API
-│
-├── components/
-│   ├── landing/
-│   │   ├── hero.tsx             # Hero section with animation
-│   │   ├── features.tsx         # Features showcase
-│   │   ├── cta.tsx              # Call to action section
-│   │   ├── header.tsx           # Navigation header
-│   │   └── footer.tsx           # Page footer
-│   ├── auth/
-│   │   ├── signup-form.tsx      # Signup form component
-│   │   └── login-form.tsx       # Login form component
-│   ├── navigation/
-│   │   └── bottom-navigation.tsx # Mobile bottom nav
-│   ├── ui/                      # shadcn/ui components
-│   ├── lottie-animation.tsx     # Lottie player component
-│   └── theme-provider.tsx       # Theme provider wrapper
-│
-├── lib/
-│   ├── types.ts                 # TypeScript interfaces
-│   ├── constants.ts             # App constants
-│   ├── formatting.ts            # Utility formatting functions
-│   ├── auth.ts                  # Authentication utilities
-│   └── utils.ts                 # General utilities
-│
-├── public/
-│   └── animations/
-│       └── hero-animation.json  # Lottie hero animation
-│
-└── scripts/
-    └── init-db.sql              # Database schema
+|-- app/
+|   |-- page.tsx                 # Landing page
+|   |-- layout.tsx               # Root layout with theme
+|   |-- globals.css              # Global styles and design tokens
+|   |-- signup/page.tsx          # Sign up page
+|   |-- login/page.tsx           # Login page
+|   |-- onboarding/page.tsx      # Onboarding flow
+|   |-- dashboard/
+|   |   |-- layout.tsx           # Dashboard layout with navigation
+|   |   |-- page.tsx             # Dashboard home
+|   |   |-- circles/page.tsx     # Savings circles
+|   |   |-- vaults/page.tsx      # Personal vaults
+|   |   |-- funds/page.tsx       # Group funds
+|   |   `-- profile/page.tsx     # User profile & settings
+|   |-- api/auth/
+|   |   |-- signup/route.ts      # Sign up API
+|   |   `-- login/route.ts       # Login API
+|
+|-- components/
+|   |-- landing/
+|   |   |-- hero.tsx             # Hero section with animation
+|   |   |-- features.tsx         # Features showcase
+|   |   |-- cta.tsx              # Call to action section
+|   |   |-- header.tsx           # Navigation header
+|   |   `-- footer.tsx           # Page footer
+|   |-- auth/
+|   |   |-- signup-form.tsx      # Signup form component
+|   |   `-- login-form.tsx       # Login form component
+|   |-- navigation/
+|   |   `-- bottom-navigation.tsx # Mobile bottom nav
+|   |-- ui/                      # shadcn/ui components
+|   |-- lottie-animation.tsx     # Lottie player component
+|   `-- theme-provider.tsx       # Theme provider wrapper
+|
+|-- lib/
+|   |-- types.ts                 # TypeScript interfaces
+|   |-- constants.ts             # App constants
+|   |-- formatting.ts            # Utility formatting functions
+|   |-- auth.ts                  # Authentication utilities
+|   `-- utils.ts                 # General utilities
+|
+|-- public/
+|   `-- animations/
+|       `-- hero-animation.json  # Lottie hero animation
+|
+`-- scripts/
+   `-- init-db.sql              # Database schema
 ```
 
 ## Getting Started
